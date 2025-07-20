@@ -6,7 +6,7 @@
 
 ---
 
-### **Abstract (Versión Mejorada)**
+### **Abstract**
 
 En el contexto contemporáneo de la filosofía de las matemáticas, persiste el debate sobre si las verdades matemáticas son descubiertas o construidas. Este trabajo se adentra en esta cuestión a través de la "Fantasía del 7", un sistema dinámico discreto artificialmente diseñado con un doble propósito: servir como un caso de estudio sobre la construcción de la verdad matemática y, a la vez, como una **refutación formal y directa de las pseudociencias como la numerología**. Para ello, se introduce una función `F₇: ℕ → ℕ` que garantiza que todo número natural converja de forma inevitable al número 7, un punto fijo elegido de manera deliberada por su arbitrariedad.
 
