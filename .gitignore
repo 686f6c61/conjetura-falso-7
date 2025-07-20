@@ -30,3 +30,6 @@ wheels/
 
 # Matplotlib cache
 .matplotlib/
+
+# Claude configuration
+.claude/
