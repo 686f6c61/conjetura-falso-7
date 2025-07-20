@@ -310,29 +310,8 @@ Esta extensión preserva convergencia pero elimina la distinción par/impar, sim
 
 #### 2.8.1 PSEUDOCÓDIGO
 
-```python
-def F7(n):
-    if n == 7:
-        return n
-    elif n > 7:
-        if n % 2 == 0:
-            return n // 2
-        else:
-            return (n - 1) // 2
-    else:  # n < 7
-        return n + 1
-
-def compute_orbit(n0, max_iterations=1000):
-    orbit = [n0]
-    current = n0
-    
-    for i in range(max_iterations):
-        if current == 7:
-            break
-        current = F7(current)
-        orbit.append(current)
-    
-    return orbit, len(orbit) - 1  # orbit, convergence_time
+La implementación básica de la función F₇ y el cálculo de órbitas se encuentra en:
+- **`scripts/fantasia7_base.py`**: Contiene las funciones `F7()` y `compute_orbit()` que implementan la funcionalidad fundamental del sistema.
 2.8.2 Consideraciones de Precisión Numérica
 Para valores de n₀ extremadamente grandes, la implementación debe considerar:
 
@@ -595,32 +574,9 @@ La mayoría de valores en el rango requieren aproximadamente `log₂(n₀)` iter
 
 La demostración presentada es completamente constructiva: dado cualquier `n₀ > 100`, el algoritmo para computar `T(n₀)` es:
 
-```python
-def prove_convergence(n0):
-    """Constructive proof that n0 converges to 7"""
-    if n0 <= 100:
-        raise ValueError("n0 must be > 100")
-    
-    current = n0
-    steps = 0
-    trajectory = [current]
-    
-    # Phase 1: Decrement until ≤ 7
-    while current > 7:
-        current = F7(current)
-        steps += 1
-        trajectory.append(current)
-        assert current < trajectory[-2]  # Verify strict decrease
-    
-    # Phase 2: Increment until = 7 (if needed)
-    while current < 7:
-        current = F7(current)
-        steps += 1
-        trajectory.append(current)
-        assert current == trajectory[-2] + 1  # Verify increment by 1
-    
-    assert current == 7
-    return steps, trajectory
+La implementación de esta demostración constructiva se encuentra en:
+- **`scripts/fantasia7_base.py`**: Contiene la función `prove_convergence()` que implementa la verificación algorítmica de convergencia.
+- **`scripts/verificacion_completa.py`**: Incluye métodos adicionales para validar trayectorias completas y verificar las propiedades de convergencia.
 Esta implementación proporciona una demostración constructiva que puede verificarse computacionalmente para cualquier valor específico de n₀.
 
 La convergencia de la Conjetura del 7 está así rigurosamente establecida tanto teórica como constructivamente, completando la demostración formal del resultado principal.
@@ -655,87 +611,12 @@ Para validar empíricamente las propiedades teóricas de la Conjetura del 7, dis
 
 #### 4.1.3 IMPLEMENTACIÓN OPTIMIZADA
 
-```python
-import numpy as np
-import time
-from multiprocessing import Pool, cpu_count
-from functools import lru_cache
+Las implementaciones optimizadas para el análisis computacional se encuentran en:
+- **`scripts/verificacion_completa.py`**: Contiene `compute_convergence_data()` y `batch_analysis()` para análisis por lotes con paralelización.
+- **`scripts/analisis_estadistico.py`**: Proporciona funciones adicionales para el análisis estadístico detallado de las trayectorias.
+- **`scripts/evaluacion_individual.py`**: Incluye herramientas especializadas para la evaluación de números individuales con métricas extendidas.
 
-@lru_cache(maxsize=10000)
-def F7_cached(n):
-    """Versión optimizada con caché para valores frecuentes"""
-    if n == 7:
-        return 7
-    elif n > 7:
-        return n // 2 if n % 2 == 0 else (n - 1) // 2
-    else:
-        return n + 1
-
-def compute_convergence_data(n0, max_iterations=1000):
-    """
-    Computa datos completos de convergencia para n0
-    
-    Returns:
-        dict: {
-            'initial': n0,
-            'trajectory': [lista de valores],
-            'convergence_time': int,
-            'max_value': int,
-            'min_value': int,
-            'decreasing_steps': int,
-            'increasing_steps': int
-        }
-    """
-    trajectory = [n0]
-    current = n0
-    steps = 0
-    decreasing_steps = 0
-    increasing_steps = 0
-    max_value = n0
-    min_before_seven = n0
-    
-    for i in range(max_iterations):
-        if current == 7:
-            break
-            
-        prev = current
-        current = F7_cached(current)
-        trajectory.append(current)
-        steps += 1
-        max_value = max(max_value, current)
-        
-        if current < prev:
-            decreasing_steps += 1
-        elif current > prev:
-            increasing_steps += 1
-            
-        if current < 7:
-            min_before_seven = min(min_before_seven, current)
-    
-    return {
-        'initial': n0,
-        'trajectory': trajectory,
-        'convergence_time': steps,
-        'converged': current == 7,
-        'max_value': max_value,
-        'min_before_seven': min_before_seven,
-        'decreasing_steps': decreasing_steps,
-        'increasing_steps': increasing_steps,
-        'trajectory_length': len(trajectory)
-    }
-
-def batch_analysis(start, end, chunk_size=1000):
-    """Análisis por lotes para rangos grandes"""
-    def analyze_chunk(chunk_start):
-        chunk_end = min(chunk_start + chunk_size, end + 1)
-        return [compute_convergence_data(n) for n in range(chunk_start, chunk_end)]
-    
-    # Paralelización por chunks
-    with Pool(processes=cpu_count()) as pool:
-        results = pool.map(analyze_chunk, chunks)
-    
-    # Flatten results
-    return [item for sublist in results for item in sublist]
+Estas implementaciones incluyen optimizaciones como caché LRU, procesamiento paralelo y estructuras de datos eficientes para manejar grandes volúmenes de datos.
 4.2 Verificación Universal en Rangos Específicos
 4.2.1 Verificación Exhaustiva para n₀ ∈ [101, 10000]
 Resultados:
@@ -744,22 +625,8 @@ Total de valores testados: 9,900
 Convergencia exitosa: 9,900 (100%)
 Tiempo de ejecución: 2.3 segundos
 Memoria utilizada: 45 MB
-python
-# Código de verificación
-start_time = time.time()
-results_small = batch_analysis(101, 10000)
-execution_time = time.time() - start_time
-
-# Estadísticas básicas
-convergence_times = [r['convergence_time'] for r in results_small]
-successful_convergence = sum(1 for r in results_small if r['converged'])
-
-print(f"Verification Results for n₀ ∈ [101, 10000]:")
-print(f"Success rate: {successful_convergence}/{len(results_small)} = 100%")
-print(f"Execution time: {execution_time:.2f} seconds")
-print(f"Average convergence time: {np.mean(convergence_times):.2f}")
-print(f"Max convergence time: {max(convergence_times)}")
-print(f"Min convergence time: {min(convergence_times)}")
+El código de verificación para este rango se encuentra implementado en:
+- **`scripts/verificacion_completa.py`**: Función `verify_range()` que ejecuta el análisis completo y genera las estadísticas reportadas.
 Output:
 
 Verification Results for n₀ ∈ [101, 10000]:
@@ -784,49 +651,9 @@ Tiempo	Frecuencia	Porcentaje
 4.3.1 Verificación de Cota Superior
 Teorema verificado: T(n₀) ≤ ⌊log₂(n₀)⌋ + 6
 
-python
-def verify_upper_bound(results):
-    """Verifica la cota superior teórica"""
-    violations = []
-    
-    for result in results:
-        n0 = result['initial']
-        actual_time = result['convergence_time']
-        theoretical_upper = int(np.log2(n0)) + 6
-        
-        if actual_time > theoretical_upper:
-            violations.append({
-                'n0': n0,
-                'actual': actual_time,
-                'bound': theoretical_upper,
-                'excess': actual_time - theoretical_upper
-            })
-    
-    return violations
-
-# Verificación
-violations = verify_upper_bound(results_small)
-print(f"Upper bound violations: {len(violations)}/{len(results_small)}")
-
-# Análisis de adherencia a la cota
-adherence_data = []
-for result in results_small:
-    n0 = result['initial']
-    actual = result['convergence_time']
-    bound = int(np.log2(n0)) + 6
-    adherence_data.append({
-        'n0': n0,
-        'actual': actual,
-        'bound': bound,
-        'ratio': actual / bound,
-        'slack': bound - actual
-    })
-
-avg_ratio = np.mean([d['ratio'] for d in adherence_data])
-avg_slack = np.mean([d['slack'] for d in adherence_data])
-
-print(f"Average actual/bound ratio: {avg_ratio:.3f}")
-print(f"Average slack (bound - actual): {avg_slack:.2f}")
+La verificación de cotas teóricas se implementa en:
+- **`scripts/verificacion_completa.py`**: Función `verify_upper_bound()` que valida el cumplimiento de las cotas superiores teóricas.
+- **`scripts/analisis_estadistico.py`**: Análisis de adherencia y cálculo de métricas de eficiencia respecto a las cotas.
 Resultados:
 
 Upper bound violations: 0/9900
@@ -835,54 +662,17 @@ Average slack (bound - actual): 4.23
 4.3.2 Verificación de Cota Inferior
 Teorema verificado: T(n₀) ≥ ⌊log₂(n₀)⌋ - 2 para infinitos valores
 
-python
-def analyze_lower_bound(results):
-    """Analiza adherencia a la cota inferior"""
-    satisfying_lower = 0
-    
-    for result in results:
-        n0 = result['initial']
-        actual_time = result['convergence_time']
-        theoretical_lower = max(1, int(np.log2(n0)) - 2)
-        
-        if actual_time >= theoretical_lower:
-            satisfying_lower += 1
-    
-    return satisfying_lower
-
-satisfying_count = analyze_lower_bound(results_small)
-satisfaction_rate = satisfying_count / len(results_small)
-
-print(f"Lower bound satisfaction: {satisfying_count}/{len(results_small)}")
-print(f"Satisfaction rate: {satisfaction_rate:.1%}")
+El análisis de cotas inferiores está implementado en:
+- **`scripts/verificacion_completa.py`**: Función `analyze_lower_bound()` para validación de cotas inferiores.
+- **`scripts/analisis_estadistico.py`**: Cálculo de tasas de satisfacción y análisis estadístico de cumplimiento.
 Resultados:
 
 Lower bound satisfaction: 9847/9900
 Satisfaction rate: 99.5%
 4.4 Análisis Estadístico Detallado
 4.4.1 Distribución de Tiempos de Convergencia
-python
-import matplotlib.pyplot as plt
-from scipy import stats
-
-# Análisis estadístico completo
-convergence_times = [r['convergence_time'] for r in results_small]
-
-statistics = {
-    'mean': np.mean(convergence_times),
-    'median': np.median(convergence_times),
-    'std': np.std(convergence_times),
-    'min': min(convergence_times),
-    'max': max(convergence_times),
-    'q25': np.percentile(convergence_times, 25),
-    'q75': np.percentile(convergence_times, 75),
-    'skewness': stats.skew(convergence_times),
-    'kurtosis': stats.kurtosis(convergence_times)
-}
-
-print("Convergence Time Statistics:")
-for key, value in statistics.items():
-    print(f"{key}: {value:.3f}")
+El análisis estadístico detallado de las distribuciones está implementado en:
+- **`scripts/analisis_estadistico.py`**: Incluye funciones para calcular estadísticas descriptivas completas, análisis de distribuciones y generación de visualizaciones con matplotlib.
 Resultados Estadísticos:
 
 Convergence Time Statistics:
@@ -896,36 +686,8 @@ q75: 12.000
 skewness: 0.234
 kurtosis: -0.112
 4.4.2 Correlación con Propiedades de n₀
-python
-def analyze_correlations(results):
-    """Analiza correlaciones entre propiedades de n₀ y tiempo de convergencia"""
-    
-    data = []
-    for result in results:
-        n0 = result['initial']
-        data.append({
-            'n0': n0,
-            'log_n0': np.log2(n0),
-            'convergence_time': result['convergence_time'],
-            'binary_weight': bin(n0).count('1'),  # Número de 1s en representación binaria
-            'trailing_zeros': (n0 & -n0).bit_length() - 1,  # Ceros al final en binario
-            'is_power_of_2': (n0 & (n0 - 1)) == 0,
-            'mod_7': n0 % 7,
-            'mod_8': n0 % 8
-        })
-    
-    df = pd.DataFrame(data)
-    
-    # Correlaciones
-    correlations = df[['log_n0', 'convergence_time', 'binary_weight', 
-                      'trailing_zeros', 'mod_7', 'mod_8']].corr()
-    
-    return df, correlations
-
-df, correlations = analyze_correlations(results_small[:1000])  # Muestra para análisis
-
-print("Correlation Matrix:")
-print(correlations['convergence_time'].sort_values(ascending=False))
+El análisis de correlaciones entre propiedades numéricas está implementado en:
+- **`scripts/analisis_estadistico.py`**: Función `analyze_correlations()` que examina relaciones entre propiedades binarias, modulares y tiempos de convergencia usando pandas y numpy.
 Resultados de Correlación:
 
 Correlation Matrix (with convergence_time):
@@ -936,69 +698,8 @@ mod_8           0.023
 mod_7          -0.012
 4.5 Análisis de Patrones en Trayectorias
 4.5.1 Identificación de Trayectorias Características
-python
-def classify_trajectories(results):
-    """Clasifica trayectorias según patrones característicos"""
-    
-    patterns = {
-        'direct_to_7': [],           # Alcanzan 7 sin pasar por < 7
-        'undershoot': [],            # Pasan por debajo de 7
-        'long_decreasing': [],       # > 15 pasos decrecientes
-        'minimal_steps': [],         # Tiempo óptimo teórico
-        'power_of_2_like': []        # Siguen patrón similar a potencias de 2
-    }
-    
-    for result in results:
-        trajectory = result['trajectory']
-        n0 = result['initial']
-        
-        # Direct to 7
-        if all(x >= 7 for x in trajectory[:-1]) and trajectory[-1] == 7:
-            patterns['direct_to_7'].append(result)
-        
-        # Undershoot
-        if any(x < 7 for x in trajectory[:-1]):
-            patterns['undershoot'].append(result)
-        
-        # Long decreasing phase
-        if result['decreasing_steps'] > 15:
-            patterns['long_decreasing'].append(result)
-        
-        # Minimal steps (within 1 of theoretical minimum)
-        theoretical_min = max(1, int(np.log2(n0)) - 2)
-        if result['convergence_time'] <= theoretical_min + 1:
-            patterns['minimal_steps'].append(result)
-        
-        # Power of 2 like behavior
-        if is_power_of_2_like(trajectory):
-            patterns['power_of_2_like'].append(result)
-    
-    return patterns
-
-def is_power_of_2_like(trajectory):
-    """Detecta si la trayectoria sigue patrón de potencia de 2"""
-    decreasing_part = []
-    for i in range(len(trajectory)-1):
-        if trajectory[i] > 7:
-            decreasing_part.append(trajectory[i])
-        else:
-            break
-    
-    if len(decreasing_part) < 3:
-        return False
-    
-    # Verifica si cada paso es aproximadamente la mitad del anterior
-    ratios = [decreasing_part[i+1] / decreasing_part[i] for i in range(len(decreasing_part)-1)]
-    avg_ratio = np.mean(ratios)
-    
-    return 0.45 <= avg_ratio <= 0.55  # Cerca de 0.5
-
-patterns = classify_trajectories(results_small[:1000])
-
-print("Trajectory Pattern Analysis:")
-for pattern_name, pattern_results in patterns.items():
-    percentage = len(pattern_results) / 1000 * 100
-    print(f"{pattern_name}: {len(pattern_results)} ({percentage:.1f}%)")
+La clasificación y análisis de patrones en trayectorias está implementada en:
+- **`scripts/analisis_estadistico.py`**: Funciones `classify_trajectories()` e `is_power_of_2_like()` que identifican y categorizan diferentes tipos de comportamiento en las trayectorias de convergencia.
 Resultados de Patrones:
 
 Trajectory Pattern Analysis:
@@ -1008,73 +709,12 @@ long_decreasing: 89 (8.9%)
 minimal_steps: 45 (4.5%)
 power_of_2_like: 156 (15.6%)
 4.5.2 Análisis de Casos Extremos
-python
-def analyze_extreme_cases(results):
-    """Analiza casos con comportamiento extremo"""
-    
-    # Tiempos de convergencia más largos
-    longest_times = sorted(results, key=lambda x: x['convergence_time'], reverse=True)[:10]
-    
-    # Tiempos de convergencia más cortos para n0 > 1000
-    large_fast = sorted([r for r in results if r['initial'] > 1000], 
-                       key=lambda x: x['convergence_time'])[:10]
-    
-    # Valores que alcanzan mínimos más bajos
-    lowest_mins = sorted(results, key=lambda x: x['min_before_seven'])[:10]
-    
-    print("Top 10 Longest Convergence Times:")
-    for i, result in enumerate(longest_times, 1):
-        print(f"{i}. n₀={result['initial']}, time={result['convergence_time']}, "
-              f"trajectory={result['trajectory']}")
-    
-    print("\nTop 10 Fastest Large Values (n₀ > 1000):")
-    for i, result in enumerate(large_fast, 1):
-        print(f"{i}. n₀={result['initial']}, time={result['convergence_time']}")
-    
-    return longest_times, large_fast, lowest_mins
-
-longest, fastest_large, lowest = analyze_extreme_cases(results_small)
+El análisis de casos extremos está implementado en:
+- **`scripts/analisis_estadistico.py`**: Función `analyze_extreme_cases()` que identifica y analiza valores con comportamiento atípico o extremo en términos de tiempos de convergencia y trayectorias.
 4.6 Verificación a Gran Escala
 4.6.1 Experimento con n₀ ∈ [10⁶, 10⁶ + 10⁴]
-python
-def large_scale_verification():
-    """Verificación a gran escala para valores muy grandes"""
-    
-    start_range = 1000000
-    sample_size = 10000
-    
-    # Muestreo aleatorio para eficiencia
-    test_values = np.random.randint(start_range, start_range + 100000, sample_size)
-    
-    start_time = time.time()
-    large_results = []
-    
-    for n0 in test_values:
-        result = compute_convergence_data(n0, max_iterations=100)
-        large_results.append(result)
-        
-        if len(large_results) % 1000 == 0:
-            print(f"Processed {len(large_results)}/{sample_size}")
-    
-    execution_time = time.time() - start_time
-    
-    # Análisis de resultados
-    success_rate = sum(1 for r in large_results if r['converged']) / len(large_results)
-    avg_time = np.mean([r['convergence_time'] for r in large_results if r['converged']])
-    max_time = max([r['convergence_time'] for r in large_results if r['converged']])
-    
-    print(f"\nLarge Scale Verification Results:")
-    print(f"Range: [{start_range}, {start_range + 100000}]")
-    print(f"Sample size: {sample_size}")
-    print(f"Success rate: {success_rate:.1%}")
-    print(f"Average convergence time: {avg_time:.2f}")
-    print(f"Maximum convergence time: {max_time}")
-    print(f"Execution time: {execution_time:.2f} seconds")
-    
-    return large_results
-
-# Ejecutar verificación a gran escala
-large_results = large_scale_verification()
+La verificación a gran escala está implementada en:
+- **`scripts/verificacion_completa.py`**: Función `large_scale_verification()` que maneja verificación eficiente de rangos extensos con muestreo aleatorio y procesamiento optimizado.
 Resultados Esperados:
 
 Large Scale Verification Results:
@@ -1086,92 +726,11 @@ Maximum convergence time: 29
 Execution time: 45.67 seconds
 4.7 Análisis de Rendimiento y Optimización
 4.7.1 Profiling de Rendimiento
-python
-import cProfile
-import pstats
-
-def performance_analysis():
-    """Análisis detallado de rendimiento"""
-    
-    # Profiling del algoritmo base
-    pr = cProfile.Profile()
-    pr.enable()
-    
-    # Ejecutar muestra representativa
-    test_sample = list(range(101, 1101))
-    for n0 in test_sample:
-        compute_convergence_data(n0)
-    
-    pr.disable()
-    
-    # Análisis de resultados
-    stats = pstats.Stats(pr)
-    stats.sort_stats('cumulative')
-    
-    print("Performance Profile (Top 10 functions):")
-    stats.print_stats(10)
-    
-    # Comparación de implementaciones
-    def time_implementation(func, test_data, iterations=5):
-        times = []
-        for _ in range(iterations):
-            start = time.time()
-            for n0 in test_data:
-                func(n0)
-            times.append(time.time() - start)
-        return np.mean(times), np.std(times)
-    
-    test_data = list(range(101, 201))
-    
-    # Implementación con caché vs sin caché
-    time_cached, std_cached = time_implementation(F7_cached, test_data)
-    time_nocache, std_nocache = time_implementation(lambda n: F7_no_cache(n), test_data)
-    
-    print(f"\nPerformance Comparison:")
-    print(f"Cached implementation: {time_cached:.4f} ± {std_cached:.4f} seconds")
-    print(f"No-cache implementation: {time_nocache:.4f} ± {std_nocache:.4f} seconds")
-    print(f"Speedup: {time_nocache/time_cached:.2f}x")
-
-def F7_no_cache(n):
-    """Versión sin caché para comparación"""
-    if n == 7:
-        return 7
-    elif n > 7:
-        return n // 2 if n % 2 == 0 else (n - 1) // 2
-    else:
-        return n + 1
-
-performance_analysis()
+El análisis de rendimiento y optimización está implementado en:
+- **`scripts/verificacion_completa.py`**: Incluye análisis de profiling con cProfile, comparación de implementaciones con y sin caché, y métricas detalladas de rendimiento.
 4.7.2 Escalabilidad y Límites Computacionales
-python
-def scalability_analysis():
-    """Análisis de escalabilidad para valores extremadamente grandes"""
-    
-    # Test con valores cada vez más grandes
-    test_ranges = [
-        (10**3, 10**3 + 100),
-        (10**4, 10**4 + 100), 
-        (10**5, 10**5 + 100),
-        (10**6, 10**6 + 100),
-        (10**9, 10**9 + 100),   # Límite de int32
-        (10**15, 10**15 + 100), # Valores muy grandes
-    ]
-    
-    scalability_results = []
-    
-    for start, end in test_ranges:
-        print(f"Testing range [{start}, {end}]...")
-        
-        sample_values = [start, start + 25, start + 50, start + 75, end]
-        
-        times = []
-        convergence_times = []
-        
-        for n0 in sample_values:
-            start_time = time.time()
-            result = compute_convergence_data(n0, max_iterations=200)
-            execution_time = time.time() - start_time
-```
+El análisis de escalabilidad para rangos extremos está implementado en:
+- **`scripts/verificacion_completa.py`**: Función `scalability_analysis()` que evalúa el comportamiento del sistema con valores hasta 10^15, analizando límites computacionales y eficiencia en rangos extremos.
 
 ---
 
@@ -1198,86 +757,21 @@ La implementación se realizó en **Python**, manteniendo la consistencia con lo
 
 ##### **4.2.1 CÓDIGO FUENTE PRINCIPAL (PYTHON)**
 
-```python
-# -*- coding: utf-8 -*-
-"""
-SISTEMA DE VERIFICACIÓN: FANTASÍA DEL 7
-"""
-import time
-import math
-import statistics
+El sistema completo de verificación está implementado en los siguientes scripts:
 
-def F7(n):
-    """
-    Implementación de la función F₇ según la Fantasía del 7.
-    """
-    if n == 7:
-        return 7
-    elif n > 7:
-        if n % 2 == 0:
-            return n // 2
-        else:
-            return (n - 1) // 2
-    else:
-        return n + 1
+- **`scripts/fantasia7_base.py`**: Contiene la implementación fundamental de la función F₇ y las utilidades básicas para trabajar con la conjetura.
 
-def evaluate_number(n0, max_iterations=1000, track_metrics=True):
-    """
-    Evalúa la convergencia de un número específico.
-    """
-    trajectory = [n0]
-    current = n0
-    steps = 0
-    start_time = time.time()
+- **`scripts/evaluacion_individual.py`**: Proporciona la función `evaluate_number()` con seguimiento detallado de métricas, incluyendo:
+  - Análisis de trayectorias completas
+  - Cálculo de cotas teóricas
+  - Métricas de eficiencia y rendimiento
+  - Propiedades binarias y estadísticas detalladas
 
-    # Seguimiento de métricas adicionales
-    max_value = n0
-    min_value = n0
-    decreasing_steps = 0
-    increasing_steps = 0
-    previous_value = n0
+- **`scripts/verificacion_completa.py`**: Extiende las capacidades con verificación por lotes, análisis paralelo y generación de reportes comprehensivos.
 
-    while current != 7 and steps < max_iterations:
-        current = F7(current)
-        trajectory.append(current)
-        steps += 1
+- **`scripts/analisis_estadistico.py`**: Implementa análisis estadísticos avanzados sobre las distribuciones de tiempos de convergencia y patrones en las trayectorias.
 
-        if track_metrics:
-            max_value = max(max_value, current)
-            min_value = min(min_value, current)
-            if current < previous_value:
-                decreasing_steps += 1
-            elif current > previous_value:
-                increasing_steps += 1
-            previous_value = current
-
-    execution_time = (time.time() - start_time) * 1000  # en ms
-    converged = current == 7
-
-    # Cálculo de cotas teóricas
-    theoretical_upper = math.floor(math.log2(n0)) + 6 if n0 > 0 else 10
-    theoretical_lower = max(1, math.floor(math.log2(n0)) - 2) if n0 > 0 else 1
-
-    efficiency = steps / theoretical_upper if theoretical_upper > 0 else 0
-    slack = theoretical_upper - steps
-
-    return {
-        "initial": n0, "converged": converged, "steps": steps,
-        "trajectory": trajectory, "executionTime": execution_time,
-        "maxValue": max_value, "minValue": min_value,
-        "trajectoryLength": len(trajectory),
-        "decreasingSteps": decreasing_steps, "increasingSteps": increasing_steps,
-        "theoreticalUpper": theoretical_upper, "theoreticalLower": theoretical_lower,
-        "satisfiesUpper": steps <= theoretical_upper,
-        "satisfiesLower": steps >= theoretical_lower,
-        "efficiency": efficiency, "slack": slack,
-        "hasUndershoot": min_value < 7,
-        "directToSeven": all(val >= 7 for val in trajectory) and converged,
-        "binaryLength": n0.bit_length(),
-        "binaryWeight": bin(n0).count('1')
-    }
-
-```
+Todos estos scripts están disponibles en el directorio `scripts/` del proyecto y pueden ser ejecutados de forma independiente o integrada para reproducir los resultados presentados en este documento.
 
 #### **4.3 EJECUCIÓN REAL Y RESULTADOS VERIFICADOS**
 
@@ -1529,3 +1023,67 @@ En última instancia, la Fantasía del 7 es un recordatorio de que las matemáti
 *   Oliveira e Silva, T. (2011). *Empirical verification of the 3x+1 and related conjectures*. In *The 3x+1 Problem: A Survey* (pp. 189-207). American Mathematical Society.
 *   Wigner, E. P. (1960). The unreasonable effectiveness of mathematics in the natural sciences. *Communications on Pure and Applied Mathematics*, 13(1), 1-14.
 *   Wittgenstein, L. (1956). *Remarks on the Foundations of Mathematics*. Basil Blackwell.
+
+---
+
+### **8. SCRIPTS Y CÓDIGO COMPUTACIONAL**
+
+Todos los experimentos computacionales y verificaciones presentados en este trabajo se han implementado en Python. Los scripts están disponibles en el directorio `scripts/` del repositorio y están diseñados para ser ejecutables de forma independiente. A continuación se describe cada uno:
+
+#### **8.1 MÓDULO BASE: `fantasia7_base.py`**
+Implementación de las funciones fundamentales de la Fantasía del 7:
+- **`F7(n)`**: Función central F₇: ℕ → ℕ
+- **`compute_orbit(n0, max_iterations=1000)`**: Cálculo de órbitas completas
+- **`verify_convergence(n0, verbose=False)`**: Verificación de convergencia con información detallada
+
+#### **8.2 SISTEMA DE VERIFICACIÓN: `verificacion_completa.py`**
+Sistema completo para verificación exhaustiva de rangos:
+- **`compute_convergence_data(n0)`**: Análisis completo de convergencia individual
+- **`batch_analysis(start, end)`**: Análisis paralelo de rangos grandes
+- **`verify_upper_bound(results)`**: Validación de cotas teóricas
+- **`run_complete_verification()`**: Verificación completa con estadísticas
+
+#### **8.3 ANÁLISIS ESTADÍSTICO: `analisis_estadistico.py`**
+Herramientas para análisis de patrones y propiedades estadísticas:
+- **`classify_trajectories(results)`**: Clasificación de trayectorias por patrones
+- **`analyze_correlations(results)`**: Análisis de correlaciones con propiedades binarias
+- **`analyze_extreme_cases(results)`**: Identificación de casos extremos
+- **`plot_convergence_distribution(results)`**: Generación de visualizaciones
+
+#### **8.4 EVALUACIÓN INDIVIDUAL: `evaluacion_individual.py`**
+Herramienta interactiva para análisis detallado de números específicos:
+- **`evaluate_number(n0, track_metrics=True)`**: Evaluación completa con métricas
+- **`print_evaluation_report(result)`**: Informe detallado formateado
+- **Modo interactivo**: Permite evaluación en tiempo real
+- **Modo batch**: Análisis de rangos con búsqueda de casos especiales
+
+#### **8.5 REQUISITOS Y EJECUCIÓN**
+**Dependencias:**
+- Python 3.8+
+- NumPy (para cálculos numéricos)
+- Pandas (para análisis de datos)
+- Matplotlib (para visualizaciones)
+- SciPy (para análisis estadístico)
+- Seaborn (para gráficos estadísticos)
+
+**Instalación de dependencias:**
+```bash
+pip install numpy pandas matplotlib scipy seaborn
+```
+
+**Ejemplos de uso:**
+```bash
+# Verificación básica
+python scripts/fantasia7_base.py
+
+# Verificación completa de un rango
+python scripts/verificacion_completa.py
+
+# Evaluación de un número específico
+python scripts/evaluacion_individual.py 12345
+
+# Análisis estadístico completo
+python scripts/analisis_estadistico.py
+```
+
+Todos los scripts están documentados y contienen ejemplos de uso. El código fuente completo está disponible en: https://github.com/686f6c61/conjetura-falso-7
