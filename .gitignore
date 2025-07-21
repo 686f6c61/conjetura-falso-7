@@ -33,3 +33,16 @@ wheels/
 
 # Claude configuration
 .claude/
+
+# Log files
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
