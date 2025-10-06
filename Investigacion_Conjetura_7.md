@@ -106,6 +106,29 @@ Es crucial aclarar el propósito ético de este trabajo. No buscamos trivializar
 
 **Invitación a la Replicación:** Animamos a los lectores a crear sus propios sistemas para cualquier número favorito. ¿Prefiere el 13? ¿El 42? ¿Su fecha de nacimiento? Nuestra metodología funciona igual. Esta replicabilidad universal es la refutación más poderosa de cualquier afirmación sobre la "especialidad" del 7. Si cualquier número puede ser "especial", entonces ninguno lo es—al menos no en el sentido místico que propone la numerología.
 
+
+## Método
+
+### Diseño
+
+Se construyó un sistema dinámico discreto mediante una función F₇: ℕ → ℕ definida por casos según la relación del argumento con el valor objetivo (7). El diseño empleó tres reglas de transición: (1) punto fijo para n = 7, (2) decremento mediante división entera para n > 7, y (3) incremento unitario para n < 7. Esta construcción permite demostrar que cualquier número natural puede ser forzado a converger a un valor predeterminado mediante operaciones elementales arbitrariamente seleccionadas.
+
+### Materiales
+
+La implementación computacional se realizó en Python 3.8+ sin dependencias externas obligatorias. El script principal (`scripts/demostraciones.py`) incluye 14 funciones de verificación de teoremas y proposiciones, generación de visualizaciones ASCII, y exportación de datos en formato CSV. Opcionalmente, matplotlib 3.3.0+ y networkx 2.5+ permiten generar visualizaciones en formato PNG. El código fuente completo está disponible en el repositorio público del proyecto.
+
+### Procedimiento
+
+El análisis siguió cuatro fases secuenciales:
+
+1. **Definición formal del sistema**: Especificación matemática rigurosa de F₇ y sus propiedades teóricas esperadas.
+
+2. **Demostración teórica**: Prueba formal de convergencia universal (Teorema 3.1), cotas superior e inferior (Teoremas 3.2 y 3.3), y caracterización de complejidad temporal (Teorema 3.3bis).
+
+3. **Verificación computacional**: Validación empírica mediante ejecución exhaustiva para rangos específicos (100-200) y números grandes representativos (hasta 10¹¹), con registro de trayectorias completas.
+
+4. **Análisis comparativo**: Contraste con la Conjetura de Collatz (Lagarias, 2010) para ilustrar diferencias entre sistemas dinámicos naturales y construcciones artificiales.
+
 ## MARCO TEÓRICO y DEFINICIONES FORMALES
 
 Antes de sumergirnos en las definiciones técnicas, expliquemos en lenguaje simple qué vamos a construir y por qué funciona. Imagina que tienes cualquier número natural (1, 2, 3, ...) y quieres forzarlo a llegar al 7 mediante una serie de operaciones. Nuestro sistema es como un tobogán matemático diseñado para que, sin importar dónde empieces, siempre termines en el 7.
@@ -1045,18 +1068,22 @@ Combinando los Teoremas 3.2 y 3.3, obtenemos una caracterización ajustada:
 **La Gran Revelación Anti-Numerológica:**
 Esta caracterización completa demuestra que el sistema es **completamente predecible**. No hay "números místicos" con comportamiento especial, solo aritmética logarítmica aburrida. Las potencias de 2 toman el tiempo máximo no por alguna propiedad cósmica, sino porque se dividen limpiamente y caen exactamente hasta 1 antes de ascender.
 
-**Tabla Resumen: Verificación de Cotas para Casos Representativos**
+*Tabla 1*
+
+*Verificación de Cotas para Casos Representativos*
 
 | n₀ | ⌊log₂(n₀)⌋ | Cota Inferior | T(n₀) Real | Cota Superior | Verificación |
 |----|-----------|---------------|------------|---------------|--------------|
-| 14 | 3 | 1 | **1** | 9 | ✓ Mínimo local |
-| 15 | 3 | 1 | **1** | 9 | ✓ Mínimo local |
-| 64 | 6 | 4 | **7** | 12 | ✓ Potencia de 2 |
-| 100 | 6 | 4 | **5** | 12 | ✓ Típico |
-| 128 | 7 | 5 | **13** | 13 | ✓ Alcanza cota superior |
-| 256 | 8 | 6 | **14** | 14 | ✓ Alcanza cota superior |
-| 1000 | 9 | 7 | **7** | 15 | ✓ Típico |
-| 1024 | 10 | 8 | **16** | 16 | ✓ Alcanza cota superior |
+| 14 | 3 | 1 | 1 | 9 | ✓ Mínimo local |
+| 15 | 3 | 1 | 1 | 9 | ✓ Mínimo local |
+| 64 | 6 | 4 | 7 | 12 | ✓ Potencia de 2 |
+| 100 | 6 | 4 | 5 | 12 | ✓ Típico |
+| 128 | 7 | 5 | 13 | 13 | ✓ Alcanza cota superior |
+| 256 | 8 | 6 | 14 | 14 | ✓ Alcanza cota superior |
+| 1000 | 9 | 7 | 7 | 15 | ✓ Típico |
+| 1024 | 10 | 8 | 16 | 16 | ✓ Alcanza cota superior |
+
+*Nota.* Las potencias de 2 (64, 128, 256, 1024) alcanzan exactamente la cota superior. Los números 14 y 15 son óptimos (llegan al 7 en 1 paso). Todos los valores cumplen estrictamente: Cota Inferior ≤ T(n₀) ≤ Cota Superior.
 
 **Observaciones clave:**
 - Las potencias de 2 (64, 128, 256, 1024) alcanzan exactamente la cota superior
@@ -1248,7 +1275,7 @@ Esta implementación proporciona una demostración constructiva que puede verifi
 La convergencia de la Conjetura del 7 está así rigurosamente establecida tanto teórica como constructivamente, completando la demostración formal del resultado principal.
 
 
-## ANÁLISIS COMPUTACIONAL y VERIFICACIÓN EMPÍRICA
+## Resultados
 
 Aquí viene el teatro de la "evidencia empírica". Vamos a ejecutar millones de casos para "verificar" algo que ya sabemos que es cierto por diseño. Es como probar que el agua moja verificando cada gota del océano. Pero este ejercicio sirve un propósito crucial: demostrar cómo la verificación computacional masiva puede crear una ilusión de profundidad científica para algo completamente trivial. Los numerólogos adoran señalar "patrones" en datos; nosotros mostraremos que incluso un sistema diseñado produce "patrones fascinantes".
 
@@ -1447,6 +1474,10 @@ La demostración empírica se realizó ejecutando el sistema de verificación. L
 
 ##### **4.3.1 Resultados de Casos Específicos**
 
+*Tabla 2*
+
+*Trayectorias de Convergencia para Casos Representativos*
+
 | n₀   | Pasos | Eficiencia | Trayectoria                                       |
 | :--- | :---- | :--------- | :------------------------------------------------ |
 | 153  | 8     | 0.615      | 153 → 76 → 38 → 19 → 9 → 4 → 5 → 6 → 7            |
@@ -1455,9 +1486,13 @@ La demostración empírica se realizó ejecutando el sistema de verificación. L
 | 519  | 10    | 0.667      | 519 → 259 → 129 → 64 → ... → 7                    |
 | 1001 | 7     | 0.467      | 1001 → 500 → 250 → 125 → 62 → 31 → 15 → 7          |
 
-*   **Verificación de cotas:** Todas las cotas teóricas se cumplen en el 100% de los casos. ✓
+*Nota.* Todas las cotas teóricas se cumplen en el 100% de los casos verificados.
 
 ##### **4.3.2 Verificación con Números Grandes**
+
+*Tabla 3*
+
+*Verificación de Cotas para Números Grandes*
 
 | n₀          | Pasos | Cota Superior | Cota Inferior | Eficiencia |
 | :---------- | :---- | :------------ | :------------ | :--------- |
@@ -1465,6 +1500,8 @@ La demostración empírica se realizó ejecutando el sistema de verificación. L
 | 10,000      | 14    | ≤19 ✓         | ≥11 ✓         | 0.737      |
 | 100,000     | 15    | ≤22 ✓         | ≥14 ✓         | 0.682      |
 | 1,000,000   | 17    | ≤25 ✓         | ≥17 ✓         | 0.680      |
+
+*Nota.* La eficiencia se define como la razón entre pasos reales y cota superior teórica.
 
 *   **Observaciones:** Escalabilidad perfecta y comportamiento logarítmico confirmado.
 
@@ -1501,6 +1538,8 @@ La verificación empírica de la Fantasía del 7 es exitosa en todos los frentes
 > *Habiendo demostrado la completa predictibilidad técnica y empírica de nuestro sistema, queda de manifiesto que la Fantasía del 7 se comporta exactamente como fue diseñada. Esta certeza absoluta, lejos de ser el final de la investigación, es el punto de partida para la pregunta central de este trabajo: ¿Qué significa que podamos fabricar una 'verdad' matemática con tanta facilidad, y qué nos enseña esto sobre la naturaleza del conocimiento matemático y su frecuente abuso en el terreno de la pseudociencia?*
 
 ---
+## Discusión
+
 
 ### **5. Reflexión Filosófica: Sobre la Construcción Arbitraria de Verdades Matemáticas**
 
