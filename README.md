@@ -13,15 +13,18 @@ Este proyecto es una demostración matemática diseñada para refutar las preten
 git clone https://github.com/686f6c61/conjetura-falso-7.git
 cd conjetura-falso-7
 
-# 2. Instalar dependencias
-pip install -r scripts/requirements.txt
+# 2. Instalar dependencias (OPCIONALES - solo para grafos PNG)
+pip install matplotlib networkx
+# O vía apt en sistemas Debian/Ubuntu:
+sudo apt install python3-matplotlib python3-networkx
 
-# 3. Ejecutar verificador del teorema
-python scripts/verificador_teorema.py
+# 3. Ejecutar demostraciones
+python scripts/demostraciones.py
 
-# 4. Verificar un número específico
-python scripts/verificador_teorema.py 10000000
-# Salida: 10000000 → 7 en 24 pasos
+# 4. Verificar un número específico con visualización ASCII (sin dependencias)
+python scripts/demostraciones.py
+# Opción 4 → 10000000
+# Salida: Visualización completa con estadísticas y verificación de teoremas
 ```
 
 ## 🔢 La Función F₇
@@ -55,17 +58,26 @@ F₇(n) = {
   - Implicaciones filosóficas
   - Refutación sistemática de la numerología
 
-### Script de Verificación
+### Scripts de Verificación
 
-#### `scripts/verificador_teorema.py`
-**Verificador completo de la Sección 3 del estudio**
+#### `scripts/demostraciones.py`
+**Verificador completo de todos los teoremas y proposiciones**
 
 **Funcionalidades principales:**
-1. **Verificación individual**: Análisis completo de cualquier número con todos los teoremas
+1. **Verificación individual**: Análisis completo de cualquier número con los 14 teoremas/proposiciones
 2. **Verificación de rangos**: Verificación masiva con estadísticas detalladas
-3. **Generación de grafos**: Visualización de trayectorias de convergencia
-4. **Exportación CSV**: Datos para análisis posterior
-5. **Números grandes**: Procesamiento especializado para n > 1,000,000
+3. **Visualización ASCII**: Gráficos en terminal sin dependencias externas
+4. **Visualización PNG**: Grafos con matplotlib/networkx (opcional)
+5. **Exportación CSV**: Datos para análisis posterior
+6. **Convergencia directa**: Verificación de casos especiales (Proposición 3.3)
+
+**Teoremas verificados:**
+- Teorema 3.1 (convergencia universal)
+- Teorema 3.2 (cota superior óptima)
+- Teorema 3.3 y 3.3bis (cotas inferiores)
+- Proposición 3.1 (potencias de 2: T(2^k) = k + 1)
+- Proposición 3.3 (convergencia directa desde n=15)
+- Y 9 puntos demostrables más
 
 **Lo que DEMUESTRA este script:**
 - TODOS los números convergen al 7 por DISEÑO, no por propiedades místicas
@@ -73,119 +85,187 @@ F₇(n) = {
 - Verifica formalmente todos los teoremas, lemas y proposiciones de la Sección 3
 - Genera visualizaciones que muestran la artificialidad del sistema
 
-## 🚀 Instalación Completa
+## 🚀 Instalación
 
-### Requisitos
+### Requisitos Mínimos
 - Python 3.8 o superior
-- pip (gestor de paquetes de Python)
+- ✅ **No requiere dependencias externas** para funcionalidad básica
 
-### Instalación paso a paso
+### Instalación Rápida (Solo Python)
 
 ```bash
 # 1. Clonar el repositorio
 git clone https://github.com/686f6c61/conjetura-falso-7.git
 cd conjetura-falso-7
 
-# 2. Crear entorno virtual (recomendado)
-python3 -m venv venv
-
-# 3. Activar entorno virtual
-# Linux/macOS:
-source venv/bin/activate
-# Windows:
-venv\Scripts\activate
-
-# 4. Instalar dependencias
-pip install -r scripts/requirements.txt
+# 2. Ejecutar directamente
+python3 scripts/demostraciones.py
 ```
 
-### Dependencias
+### Instalación Completa (Con gráficos PNG)
 
-El archivo `scripts/requirements.txt` incluye solo las librerías necesarias:
+```bash
+# Opción 1: pip (en entorno virtual)
+python3 -m venv venv
+source venv/bin/activate  # Linux/macOS
+pip install matplotlib networkx
 
-| Librería | Versión Mínima | Uso en el Proyecto |
-|----------|----------------|-------------------|
-| `matplotlib` | ≥3.3.0 | Generación de grafos de convergencia |
-| `networkx` | ≥2.5 | Visualización de trayectorias como grafos dirigidos |
+# Opción 2: apt (sistemas Debian/Ubuntu)
+sudo apt install python3-matplotlib python3-networkx
+```
 
-## 🔬 Uso del Script Verificador
+### Dependencias Opcionales
+
+| Librería | Uso | Necesaria |
+|----------|-----|-----------|
+| `matplotlib` | Gráficos PNG | ❌ No (usa ASCII si falta) |
+| `networkx` | Grafos dirigidos | ❌ No (usa ASCII si falta) |
+
+**Nota:** El script detecta automáticamente las dependencias disponibles y usa visualización ASCII como alternativa.
+
+## 🔬 Uso del Script de Demostraciones
 
 ### Modo Interactivo (Menú principal)
 
 ```bash
-python scripts/verificador_teorema.py
+python scripts/demostraciones.py
 ```
 
 **Opciones del menú:**
-1. Verificar convergencia de un número
-2. Verificar convergencia de un rango
-3. Generar grafo de trayectoria
-4. Generar CSV de convergencias (rangos ≥ 100)
-5. Generar CSV para números grandes (≥ 1,000,000)
+1. **Verificar número individual (completo)** - Análisis exhaustivo con los 14 teoremas
+2. **Verificar rango (estadísticas)** - Verificación masiva de rangos de números
+3. **Verificar Proposición 3.3** - Casos especiales de convergencia directa
+4. **Generar visualización de trayectoria** - ASCII o PNG según dependencias
+5. **Generar CSV de convergencias** - Exportar rangos completos
+6. **Generar CSV números grandes** - Análisis de números > 1,000,000
 0. Salir
 
-### Verificación por línea de comandos
+### Ejemplo de Salida (Opción 4 - Visualización)
 
-```bash
-# Verificar un número específico
-python scripts/verificador_teorema.py 1500
-# Salida: 1500 → 7 en 11 pasos
+```
+======================================================================
+VISUALIZACIÓN DE TRAYECTORIA: 64 → 7
+======================================================================
 
-# Verificar un número grande
-python scripts/verificador_teorema.py 10000000
-# Salida: 10000000 → 7 en 24 pasos
+📊 ESTADÍSTICAS:
+   Pasos totales:      7
+   Fase descendente:   4 pasos
+   Fase ascendente:    3 pasos
+   Valor mínimo:       4
+   Cotas:              4 ≤ 7 ≤ 12
+
+📈 TRAYECTORIA COMPLETA:
+──────────────────────────────────────────────────────────────────────
+   Paso  0:   64 ████████████████████████████████████████ →
+   Paso  1:   32 ████████████████████ →
+   Paso  2:   16 ██████████ →
+   Paso  3:    8 █████ →
+   Paso  4:    4 ██ →
+   Paso  5:    5 ███ →
+   Paso  6:    6 ███ →
+   Paso  7:    7 ████ ✓
+
+✅ VERIFICACIÓN DE TEOREMAS:
+   Teorema 3.2 (cota superior): ✓
+   Teorema 3.3 (cota inferior): ✓
+   Proposición 3.1 (potencia de 2): ✓
+      2^6 = 64: 7 pasos (teórico: 7)
 ```
 
-## 📊 Archivos Generados
+## 📊 Archivos de Datos y Visualización
 
-### Grafos de Convergencia (PNG)
-- **Ejemplo**: `grafo_convergencia_1500.png`
+### 📈 Grafos de Convergencia (PNG)
+
+El script genera grafos visuales cuando matplotlib/networkx están disponibles:
+
+**Ejemplo incluido:** [`scripts/grafo_convergencia_965489.png`](scripts/grafo_convergencia_965489.png)
+
+![Grafo de Convergencia 965489](scripts/grafo_convergencia_965489.png)
+
 - Visualiza la trayectoria completa de n₀ → 7
-- Nodos en azul claro, excepto el 7 en rojo (punto fijo)
-- Incluye información del Teorema 3.1 y cotas
+- Nodo 7 en rojo (punto fijo), otros en azul claro
+- Incluye verificación del Teorema 3.1 y cotas
 
-### Archivos CSV
-- **Rangos**: `convergencias_100_200.csv`
-  - Columnas: n₀, k_pasos, trayectoria completa, valor_mínimo, fases, cotas
-- **Números grandes**: `convergencias_grandes_3_numeros.csv`
-  - Incluye primeros y últimos 10 pasos de trayectorias largas
+### 📋 Archivos CSV de Verificación
 
-### Archivos JSON (opcional)
-- **Verificación completa**: `verificacion_seccion3_[rango]_[timestamp].json`
-- Contiene validación de todos los teoremas y estadísticas agregadas
+#### [`scripts/convergencias_100_200.csv`](scripts/convergencias_100_200.csv)
+Verificación completa del rango 100-200 (101 números)
+
+**Columnas:**
+- `n`: Número inicial
+- `k`: Pasos hasta convergencia
+- `cota_superior`, `cota_inferior`: Límites teóricos
+- `cumple_cota_sup`, `cumple_cota_inf`: Verificación booleana
+- `es_potencia_2`: Detección de 2^k
+- `cumple_proposicion_3_1`: T(2^k) = k + 1
+- `trayectoria`: Secuencia completa
+
+**Ejemplo de fila:**
+```csv
+128,8,13,5,True,True,True,True,8,128 → 64 → 32 → 16 → 8 → 4 → 5 → 6 → 7
+```
+
+#### [`scripts/convergencias_grandes_3_numeros.csv`](scripts/convergencias_grandes_3_numeros.csv)
+Análisis de números grandes para demostrar escalabilidad
+
+**Números incluidos:**
+- `1,000,000` → 17 pasos
+- `98,364,526,374` → 36 pasos (número de 11 dígitos)
+- `2,147,483,647` → 28 pasos (máximo int32)
+
+**Formato:**
+- Trayectorias largas muestran primeros 5 y últimos 5 pasos
+- Todas las verificaciones de teoremas incluidas
 
 ## 🎯 Ejemplos de Uso
 
 ### 1. Verificar que el 7 NO es especial
 
 ```bash
-python scripts/verificador_teorema.py
-# Opción 1: Ingrese cualquier número
+python scripts/demostraciones.py
+# Opción 1 → Ingrese cualquier número
 # Verá que TODOS convergen al 7 por diseño artificial
 ```
 
-### 2. Generar grafo de convergencia
-
-```bash
-python scripts/verificador_teorema.py
-# Opción 3: Ingrese 1500
-# Genera: grafo_convergencia_1500.png
+**Salida ejemplo (n=128):**
+```
+✅ Verificación completa para n₀ = 128
+   Convergencia: 128 → 7 en 8 pasos
+   Teorema 3.2 (cota superior): ✓ (8 ≤ 13)
+   Teorema 3.3 (cota inferior): ✓ (5 ≤ 8)
+   Proposición 3.1 (potencia de 2): ✓ (T(2^7) = 8)
 ```
 
-### 3. Análisis de números grandes
+### 2. Generar visualización ASCII (sin dependencias)
 
 ```bash
-python scripts/verificador_teorema.py
-# Opción 5: Ingrese 10000000, 5000000, 1000000
-# Genera CSV con análisis detallado
+python scripts/demostraciones.py
+# Opción 4 → 64
+# Muestra gráfico de barras ASCII + verificación de teoremas
 ```
 
-### 4. Verificación de rangos
+### 3. Generar grafo PNG (con matplotlib)
 
 ```bash
-python scripts/verificador_teorema.py
-# Opción 2: Rango 100-200
-# Verifica TODOS los números y genera estadísticas
+python scripts/demostraciones.py
+# Opción 4 → 965489
+# Genera: scripts/grafo_convergencia_965489.png
+```
+
+### 4. Análisis de números grandes
+
+```bash
+python scripts/demostraciones.py
+# Opción 6 → Ingrese: 1000000, 98364526374, 2147483647
+# Genera: convergencias_grandes_3_numeros.csv
+```
+
+### 5. Verificación de rangos completos
+
+```bash
+python scripts/demostraciones.py
+# Opción 5 → Rango: 100 a 200
+# Genera: convergencias_100_200.csv (101 números verificados)
 ```
 
 ## 🎓 Lección Anti-Numerológica
@@ -199,10 +279,23 @@ Este proyecto demuestra matemáticamente que:
 
 ## 📖 Resultados Clave
 
-- **10,000,000** converge en 24 pasos (dentro de las cotas teóricas: 21 ≤ 24 ≤ 29)
-- **100% de convergencia** para TODOS los números naturales
-- **Tiempo promedio**: O(log n) pasos
-- **NO hay excepciones** ni casos especiales genuinos
+### Verificación Experimental Completa
+
+✅ **100% de convergencia** verificada para:
+- Rango 100-200: 101 números → todos convergen
+- Números grandes probados:
+  - `1,000,000` → 17 pasos (cota: 17 ≤ 17 ≤ 25)
+  - `98,364,526,374` → 36 pasos (cota: 34 ≤ 36 ≤ 42)
+  - `2,147,483,647` → 28 pasos (cota: 28 ≤ 28 ≤ 36)
+
+✅ **Todos los teoremas verificados:**
+- Teorema 3.2 (cota superior): 100% cumplimiento
+- Teorema 3.3 (cota inferior): 100% cumplimiento
+- Proposición 3.1 (potencias de 2): T(2^k) = k + 1 verificada
+
+✅ **Complejidad temporal:** Θ(log n) pasos (Teorema 3.3bis)
+
+❌ **NO hay excepciones** ni casos especiales genuinos
 
 ## 🔬 Para Escépticos y Educadores
 
