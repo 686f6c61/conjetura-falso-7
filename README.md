@@ -305,15 +305,6 @@ Este material es ideal para:
 - Ilustrar el pensamiento crítico aplicado a afirmaciones numerológicas
 - Refutar con rigor matemático las pretensiones místicas sobre números
 
-## 📖 Cita
-
-Si usas este trabajo para educación o investigación:
-
-```
-Benítez, R. (2025). "La Fantasía del 7: Una Refutación Matemática de la Numerología". 
-GitHub: https://github.com/686f6c61/conjetura-falso-7
-```
-
 ## ⚖️ Licencia
 
 MIT License - Úsalo libremente para combatir la pseudociencia.
