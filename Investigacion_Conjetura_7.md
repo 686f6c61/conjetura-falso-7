@@ -2452,27 +2452,6 @@ Las matemáticas son la herramienta más poderosa que tenemos para entender el u
 
 **Q.E.D.**
 
-### **7. Bibliografía**
-
-*   Borwein, J., & Bailey, D. (2004). *Mathematics by Experiment: Plausible Reasoning in the 21st Century*. A K Peters/CRC Press.
-*   Brouwer, L. E. J. (1907). *On the Foundations of Mathematics*. PhD thesis, University of Amsterdam.
-*   Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2009). *Introduction to Algorithms*. MIT Press.
-*   Davis, P. J., & Hersh, R. (1981). *The Mathematical Experience*. Birkhäuser.
-*   Devaney, R. L. (2003). *An Introduction to Chaotic Dynamical Systems*. Westview Press.
-*   Gödel, K. (1931). Über formal unentscheidbare Sätze der Principia Mathematica und verwandter Systeme I. *Monatshefte für Mathematik und Physik*, 38(1), 173-198.
-*   Hardy, G. H. (1940). *A Mathematician's Apology*. Cambridge University Press.
-*   Hilbert, D. (1899). *Grundlagen der Geometrie*. Teubner.
-*   Kaprekar, D. R. (1949). Another Solitaire Game. *Scripta Mathematica*, 15, 244-245.
-*   Knorr-Cetina, K. (1981). *The Manufacture of Knowledge: An Essay on the Constructivist and Contextual Nature of Science*. Pergamon Press.
-*   Lakatos, I. (1976). *Proofs and Refutations: The Logic of Mathematical Discovery*. Cambridge University Press.
-*   Latour, B., & Woolgar, S. (1979). *Laboratory Life: The Construction of Scientific Facts*. Sage Publications.
-*   Nahin, P. J. (1998). *An Imaginary Tale: The Story of √-1*. Princeton University Press.
-*   Oliveira e Silva, T. (2011). *Empirical verification of the 3x+1 and related conjectures*. In *The 3x+1 Problem: A Survey* (pp. 189-207). American Mathematical Society.
-*   Wigner, E. P. (1960). The unreasonable effectiveness of mathematics in the natural sciences. *Communications on Pure and Applied Mathematics*, 13(1), 1-14.
-*   Wittgenstein, L. (1956). *Remarks on the Foundations of Mathematics*. Basil Blackwell.
-
----
-
 ### **8. Scripts y Herramientas de Verificación**
 
 Todas las verificaciones y demostraciones presentadas en este trabajo se han implementado en Python. El script principal está disponible en el directorio `scripts/` del repositorio y permite verificar de forma práctica todos los teoremas demostrados.
@@ -2542,11 +2521,15 @@ python scripts/demostraciones.py 10000000
 El script está completamente documentado y contiene verificación formal de todos los elementos de la Sección 3. El código fuente completo está disponible en: https://github.com/686f6c61/conjetura-falso-7
 ---
 
-## REFERENCIAS
+## Referencias
 
 Bishop, E. (1967). *Foundations of constructive analysis*. McGraw-Hill.
 
 Brouwer, L. E. J. (1907). *Over de grondslagen der wiskunde* [On the foundations of mathematics] [Doctoral dissertation, University of Amsterdam]. University of Amsterdam.
+
+Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2009). *Introduction to algorithms* (3rd ed.). MIT Press.
+
+Devaney, R. L. (2003). *An introduction to chaotic dynamical systems* (2nd ed.). Westview Press.
 
 Gardner, M. (1985). *The magic numbers of Dr. Matrix*. Prometheus Books.
 
@@ -2554,11 +2537,7 @@ Kaprekar, D. R. (1955). An interesting property of the number 6174. *Scripta Mat
 
 Lagarias, J. C. (2010). *The ultimate challenge: The 3x+1 problem*. American Mathematical Society.
 
-Lagarias, J. C. (2011). The 3x+1 problem: An annotated bibliography (1963–1999). In J. C. Lagarias (Ed.), *The ultimate challenge: The 3x+1 problem* (pp. 267–341). American Mathematical Society. https://arxiv.org/abs/math/0309224
-
 Lakatos, I. (1976). *Proofs and refutations: The logic of mathematical discovery* (J. Worrall & E. Zahar, Eds.). Cambridge University Press.
-
-Shapiro, S. (2000). *Thinking about mathematics: The philosophy of mathematics*. Oxford University Press.
 
 Wittgenstein, L. (1956). *Remarks on the foundations of mathematics* (G. E. M. Anscombe, Trans.; Rev. ed.; G. H. von Wright & R. Rhees, Eds.). Basil Blackwell.
 
