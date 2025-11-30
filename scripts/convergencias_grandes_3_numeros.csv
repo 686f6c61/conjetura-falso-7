@@ -1,0 +1,4 @@
+n,k,cota_superior,cota_inferior,cumple_cota_sup,cumple_cota_inf,es_potencia_2,cumple_proposicion_3_1,k_teorico_pot2,trayectoria_resumen
+1000000,17,25,17,True,True,False,,,1000000 → 500000 → 250000 → 125000 → 62500 → ... → 122 → 61 → 30 → 15 → 7
+98364526374,36,42,34,True,True,False,,,98364526374 → 49182263187 → 24591131593 → 12295565796 → 6147782898 → ... → 22 → 11 → 5 → 6 → 7
+2147483647,28,36,28,True,True,False,,,2147483647 → 1073741823 → 536870911 → 268435455 → 134217727 → ... → 127 → 63 → 31 → 15 → 7
